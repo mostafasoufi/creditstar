@@ -70,6 +70,7 @@ You need to create a webapp that provides:
 
 ## Evaluation Criteria
 
+*  Completed app can be installed with the use of Docker by following instructions on readme.
 *  Is every feature working
 *  Use as much [Yii 2](https://www.yiiframework.com) built-in features. For layout use Bootstrap which comes with Yii2 OOTB (feel free to use Foundation 6 instead of Bootstrap)
 *  MVC usage
