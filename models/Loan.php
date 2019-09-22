@@ -5,17 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "loan".
  *
  * @property int $id
- * @property string $first_name
- * @property string $last_name
- * @property string $email
- * @property int $personal_code
- * @property int $phone
- * @property bool $active
- * @property bool $dead
- * @property string $lang
+ * @property int $user_id
+ * @property string $amount
+ * @property string $interest
+ * @property int $duration
+ * @property string $start_date
+ * @property string $end_date
+ * @property int $campaign
+ * @property bool $status
  */
 class Loan extends \yii\db\ActiveRecord
 {
@@ -24,7 +24,7 @@ class Loan extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'user';
+        return 'loan';
     }
 
     /**
@@ -33,11 +33,12 @@ class Loan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'last_name', 'email', 'personal_code', 'phone'], 'required'],
-            [['first_name', 'last_name', 'email', 'lang'], 'string'],
-            [['personal_code', 'phone'], 'default', 'value' => null],
-            [['personal_code', 'phone'], 'integer'],
-            [['active', 'dead'], 'boolean'],
+            [['user_id', 'amount', 'interest', 'duration', 'start_date', 'end_date', 'campaign'], 'required'],
+            [['user_id', 'duration', 'campaign'], 'default', 'value' => null],
+            [['user_id', 'duration', 'campaign'], 'integer'],
+            [['amount', 'interest'], 'number'],
+            [['start_date', 'end_date'], 'safe'],
+            [['status'], 'boolean'],
         ];
     }
 
@@ -48,14 +49,14 @@ class Loan extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
-            'email' => 'Email',
-            'personal_code' => 'Personal Code',
-            'phone' => 'Phone',
-            'active' => 'Active',
-            'dead' => 'Dead',
-            'lang' => 'Lang',
+            'user_id' => 'User ID',
+            'amount' => 'Amount',
+            'interest' => 'Interest',
+            'duration' => 'Duration',
+            'start_date' => 'Start Date',
+            'end_date' => 'End Date',
+            'campaign' => 'Campaign',
+            'status' => 'Status',
         ];
     }
 }
