@@ -20,9 +20,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'duration')->textInput() ?>
 
-    <?= $form->field($model, 'start_date')->textInput() ?>
+    <?= $form->field($model, 'start_date')->textInput(['type' => 'date']) ?>
 
-    <?= $form->field($model, 'end_date')->textInput() ?>
+    <?= $form->field($model, 'end_date')->textInput(['type' => 'date']) ?>
 
     <?= $form->field($model, 'campaign')->textInput() ?>
 

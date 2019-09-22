@@ -35,9 +35,16 @@ class User extends \yii\db\ActiveRecord
         return [
             [['first_name', 'last_name', 'email', 'personal_code', 'phone'], 'required'],
             [['first_name', 'last_name', 'email', 'lang'], 'string'],
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Email already exist. Please try another one.'],
             [['personal_code', 'phone'], 'default', 'value' => null],
             [['personal_code', 'phone'], 'integer'],
+            ['personal_code', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Personal code already exist. Please try another one.'],
+            ['personal_code', 'string', 'length' => [11, 11]],
+            ['phone', 'string', 'length' => [8, 8]],
+            ['phone', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Phone already exist. Please try another one.'],
             [['active', 'dead'], 'boolean'],
+            ['lang', 'string', 'length' => [3, 3]],
         ];
     }
 

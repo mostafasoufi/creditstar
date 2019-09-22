@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'last_name:ntext',
             'email:ntext',
             'personal_code',
-            //'phone',
+            'phone',
             //'active:boolean',
             //'dead:boolean',
             //'lang:ntext',
