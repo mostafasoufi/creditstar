@@ -17,7 +17,7 @@ use Yii;
  * @property bool $dead
  * @property string $lang
  */
-class User extends \yii\db\ActiveRecord
+class Loan extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
