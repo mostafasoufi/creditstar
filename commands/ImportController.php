@@ -7,6 +7,8 @@
 
 namespace app\commands;
 
+use app\models\Importer;
+use app\models\User;
 use yii\base\Action;
 use yii\console\Controller;
 use yii\helpers\Console;
@@ -19,8 +21,8 @@ use JsonSchema\Constraints;
  */
 class ImportController extends Controller
 {
-    public $file;
-    public $model;
+    public $user;
+    public $loan;
     private $json;
 
     /**
@@ -29,7 +31,7 @@ class ImportController extends Controller
      */
     public function options($actionID)
     {
-        return ['file', 'model'];
+        return ['user', 'loan'];
     }
 
     /**
@@ -38,23 +40,9 @@ class ImportController extends Controller
     public function optionAliases()
     {
         return [
-            'file' => 'file',
-            'model' => 'model',
+            'user' => 'user',
+            'loan' => 'loan',
         ];
-    }
-
-    /**
-     * Check model is correct.
-     *
-     */
-    private function checkModel()
-    {
-        if (array_search($this->model, ['user', 'loan']) === false) {
-            $this->stdout("Error! model is not correct, acceptable: user, loan\n\n", Console::FG_RED);
-            return;
-        }
-
-        return true;
     }
 
     /**
@@ -62,19 +50,48 @@ class ImportController extends Controller
      *
      * @return bool
      */
-    private function checkJson()
+    private function checkFiles()
     {
-        if (!file_exists($this->file)) {
-            $this->stdout("File {$this->file} not exist.\n", Console::FG_RED);
+        if (!file_exists($this->user)) {
+            $this->stdout("File {$this->user} not exist.\n", Console::FG_RED);
+            return;
+        }
+
+        if (!file_exists($this->loan)) {
+            $this->stdout("File {$this->loan} not exist.\n", Console::FG_RED);
             return;
         }
 
         // Set json variable.
         $this->set_json();
 
+        return true;
+    }
+
+    private function checkUserSchema()
+    {
         // Validate
         $validator = new JsonSchema\Validator();
-        $validator->validate($this->json, (object)array('$ref' => 'file://' . realpath($this->model . '-schema.json')));
+        $validator->validate($this->json['user'], (object)array('$ref' => 'file://' . realpath('users-schema.json')));
+
+        if (!$validator->isValid()) {
+            $this->stdout("JSON does not validate:\n", Console::FG_RED);
+
+            foreach ($validator->getErrors() as $error) {
+                $this->stdout(sprintf("[%s] %s\n", $error['property'], $error['message']), Console::FG_YELLOW);
+            }
+
+            return;
+        }
+
+        return true;
+    }
+
+    private function checkLoanSchema()
+    {
+        // Validate
+        $validator = new JsonSchema\Validator();
+        $validator->validate($this->json['loan'], (object)array('$ref' => 'file://' . realpath('loans-schema.json')));
 
         if (!$validator->isValid()) {
             $this->stdout("JSON does not validate:\n", Console::FG_RED);
@@ -95,16 +112,12 @@ class ImportController extends Controller
      */
     public function beforeAction($action)
     {
-        if (!$this->file || !$this->model) {
-            $this->stdout("Error! arguments -file or -model not found.\n", Console::FG_RED);
+        if (!$this->user || !$this->loan) {
+            $this->stdout("Error! arguments -user or -loan not found.\n", Console::FG_RED);
             return false;
         }
 
-        if (!$this->checkModel()) {
-            return false;
-        }
-
-        if (!$this->checkJson()) {
+        if (!$this->checkFiles() || !$this->checkUserSchema() || !$this->checkLoanSchema()) {
             return false;
         }
 
@@ -116,10 +129,31 @@ class ImportController extends Controller
      */
     public function actionIndex()
     {
-        foreach ($this->json as $item) {
-            echo $this->ansiFormat("Imported successfully.", Console::FG_GREEN);
+        $importer = new Importer();
 
-            echo "\n";
+        foreach ($this->json['user'] as $user) {
+            // Check user exist.
+            if (User::find()->where(['email' => $user->email])->count()) {
+                $this->stdout(sprintf("Email %s already exist.\n", $user->email), Console::FG_RED);
+                continue;
+            }
+
+            try {
+
+                $user_id = $importer->user((array)$user);
+                $this->stdout(sprintf("User %s imported successfully.\n", $user->id), Console::FG_GREEN);
+
+                // Insert user loans
+                foreach ($this->json['loan'] as $loan) {
+                    if ($loan->user_id == $user->id) {
+                        $importer->loan((array)$loan, $user_id);
+                        $this->stdout(sprintf(" - Loan %s imported.\n", $loan->id));
+                    }
+                }
+
+            } catch (\Exception $e) {
+                $this->stdout(sprintf(" - Error: %s\n", $e->getMessage()), Console::FG_RED);
+            }
         }
     }
 
@@ -128,6 +162,7 @@ class ImportController extends Controller
      */
     private function set_json()
     {
-        $this->json = json_decode(file_get_contents($this->file));
+        $this->json['user'] = json_decode(file_get_contents($this->user));
+        $this->json['loan'] = json_decode(file_get_contents($this->loan));
     }
 }
