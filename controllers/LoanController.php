@@ -67,7 +67,7 @@ class LoanController extends Controller
     public function actionCreate()
     {
         // Making sure the user is not empty.
-        if (!User::findAll(1)) {
+        if (!User::find()->all()) {
             Yii::$app->session->setFlash('error', 'You should have a user to create a loan.'); // TODO need i18n
             return $this->redirect(['user/create']);
         }

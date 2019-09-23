@@ -28,10 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'amount',
             'interest',
             'duration',
-            //'start_date',
-            //'end_date',
+            'start_date',
+            'end_date',
             //'campaign',
-            //'status:boolean',
+            'status:boolean',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
