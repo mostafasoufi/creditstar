@@ -18,7 +18,8 @@
         "yiisoft/yii2": "~2.0.17",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-        "justinrainbow/json-schema": "^5.2"
+        "justinrainbow/json-schema": "^5.2",
+        "renekorss/personal-id-code-php": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

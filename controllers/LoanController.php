@@ -10,6 +10,7 @@ use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use RKD\PersonalIdCode\PersonalIdCode;
 
 /**
  * LoanController implements the CRUD actions for Loan model.
@@ -54,8 +55,12 @@ class LoanController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $user = User::findOne($model->user_id);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'user' => $user,
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use RKD\PersonalIdCode\PersonalIdCode;
 use Throwable;
 use Yii;
 use app\models\User;
@@ -54,8 +55,13 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $id = new PersonalIdCode($model->personal_code);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'age' => $id->getAge(),
+            'gender' => $id->getGender(),
         ]);
     }
 

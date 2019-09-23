@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "931d431f8153c30b93b46a9be2bd00eb",
+    "content-hash": "4c8d9d6cdfc58eefe7a61d96825590ee",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -394,6 +394,49 @@
                 "schema"
             ],
             "time": "2019-01-14T23:55:14+00:00"
+        },
+        {
+            "name": "renekorss/personal-id-code-php",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/renekorss/personal-id-code-php.git",
+                "reference": "37eb426483fef45ffa1f4944b08159b2f30aeed3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/renekorss/personal-id-code-php/zipball/37eb426483fef45ffa1f4944b08159b2f30aeed3",
+                "reference": "37eb426483fef45ffa1f4944b08159b2f30aeed3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpdocumentor/phpdocumentor": "dev-master",
+                "phpmd/phpmd": "^2.6",
+                "phpunit/phpunit": "^7.3",
+                "squizlabs/php_codesniffer": "^3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RKD\\PersonalIdCode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rene Korss",
+                    "email": "rene.korss@gmail.com"
+                }
+            ],
+            "description": "Estonian personal ID code validator and processor",
+            "time": "2018-11-25T15:54:25+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
