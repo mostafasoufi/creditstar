@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use app\models\Loan;
 use yii\data\ActiveDataProvider;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -64,6 +66,12 @@ class LoanController extends Controller
      */
     public function actionCreate()
     {
+        // Making sure the user is not empty.
+        if (!User::findAll(1)) {
+            Yii::$app->session->setFlash('error', 'You should have a user to create a loan.'); // TODO need i18n
+            return $this->redirect(['user/create']);
+        }
+
         $model = new Loan();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -101,6 +109,8 @@ class LoanController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws StaleObjectException
      */
     public function actionDelete($id)
     {
