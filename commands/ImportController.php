@@ -10,6 +10,8 @@ namespace app\commands;
 use yii\base\Action;
 use yii\console\Controller;
 use yii\helpers\Console;
+use JsonSchema;
+use JsonSchema\Constraints;
 
 /**
  * Database Importer Command.
@@ -19,6 +21,7 @@ class ImportController extends Controller
 {
     public $file;
     public $model;
+    private $json;
 
     /**
      * @param string $actionID
@@ -41,23 +44,49 @@ class ImportController extends Controller
     }
 
     /**
-     * Check file exist.
-     *
-     * @return bool
-     */
-    private function checkFileExist()
-    {
-        return file_exists($this->file);
-    }
-
-    /**
      * Check model is correct.
      *
      */
     private function checkModel()
     {
-        $model = 'app\models\\' . ucfirst($this->model);
-        return class_exists($model);
+        if (array_search($this->model, ['user', 'loan']) === false) {
+            $this->stdout("Error! model is not correct, acceptable: user, loan\n\n", Console::FG_RED);
+            return;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check file exist.
+     *
+     * @return bool
+     */
+    private function checkJson()
+    {
+        if (!file_exists($this->file)) {
+            $this->stdout("File {$this->file} not exist.\n", Console::FG_RED);
+            return;
+        }
+
+        // Set json variable.
+        $this->set_json();
+
+        // Validate
+        $validator = new JsonSchema\Validator();
+        $validator->validate($this->json, (object)array('$ref' => 'file://' . realpath($this->model . '-schema.json')));
+
+        if (!$validator->isValid()) {
+            $this->stdout("JSON does not validate:\n", Console::FG_RED);
+
+            foreach ($validator->getErrors() as $error) {
+                $this->stdout(sprintf("[%s] %s\n", $error['property'], $error['message']), Console::FG_YELLOW);
+            }
+
+            return;
+        }
+
+        return true;
     }
 
     /**
@@ -67,18 +96,16 @@ class ImportController extends Controller
     public function beforeAction($action)
     {
         if (!$this->file || !$this->model) {
-            echo $this->ansiFormat('Error! arguments -file or -model not found.', Console::FG_RED) . "\n";
-            return;
-        }
-
-        if (!$this->checkFileExist()) {
-            echo $this->ansiFormat('Error! the file is not exist.', Console::FG_RED) . "\n";
-            return;
+            $this->stdout("Error! arguments -file or -model not found.\n", Console::FG_RED);
+            return false;
         }
 
         if (!$this->checkModel()) {
-            echo $this->ansiFormat('Error! the model is not exist.', Console::FG_RED) . "\n";
-            return;
+            return false;
+        }
+
+        if (!$this->checkJson()) {
+            return false;
         }
 
         return parent::beforeAction($action);
@@ -89,7 +116,18 @@ class ImportController extends Controller
      */
     public function actionIndex()
     {
-        $name = $this->ansiFormat('Success', Console::FG_GREEN);
-        echo "$name.\n";
+        foreach ($this->json as $item) {
+            echo $this->ansiFormat("Imported successfully.", Console::FG_GREEN);
+
+            echo "\n";
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function set_json()
+    {
+        $this->json = json_decode(file_get_contents($this->file));
     }
 }

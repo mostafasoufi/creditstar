@@ -1,0 +1,115 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "array",
+  "title": "The Root Schema",
+  "items": {
+    "$id": "#/items",
+    "type": "object",
+    "title": "The Items Schema",
+    "required": [
+      "id",
+      "user_id",
+      "amount",
+      "interest",
+      "duration",
+      "start_date",
+      "end_date",
+      "campaign",
+      "status"
+    ],
+    "properties": {
+      "id": {
+        "$id": "#/items/properties/id",
+        "type": "string",
+        "title": "The Id Schema",
+        "default": "",
+        "examples": [
+          "36470"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "user_id": {
+        "$id": "#/items/properties/user_id",
+        "type": "string",
+        "title": "The User_id Schema",
+        "default": "",
+        "examples": [
+          "7521"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "amount": {
+        "$id": "#/items/properties/amount",
+        "type": "string",
+        "title": "The Amount Schema",
+        "default": "",
+        "examples": [
+          "300.0000"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "interest": {
+        "$id": "#/items/properties/interest",
+        "type": "string",
+        "title": "The Interest Schema",
+        "default": "",
+        "examples": [
+          "15.0000"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "duration": {
+        "$id": "#/items/properties/duration",
+        "type": "string",
+        "title": "The Duration Schema",
+        "default": "",
+        "examples": [
+          "30"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "start_date": {
+        "$id": "#/items/properties/start_date",
+        "type": "string",
+        "title": "The Start_date Schema",
+        "default": "",
+        "examples": [
+          "1436313600"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "end_date": {
+        "$id": "#/items/properties/end_date",
+        "type": "string",
+        "title": "The End_date Schema",
+        "default": "",
+        "examples": [
+          "1444089600"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "campaign": {
+        "$id": "#/items/properties/campaign",
+        "type": "string",
+        "title": "The Campaign Schema",
+        "default": "",
+        "examples": [
+          "7"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "status": {
+        "$id": "#/items/properties/status",
+        "type": "string",
+        "title": "The Status Schema",
+        "default": "",
+        "examples": [
+          "1"
+        ],
+        "pattern": "^(.*)$"
+      }
+    }
+  }
+}
