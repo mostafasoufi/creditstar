@@ -9,7 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
@@ -69,6 +69,15 @@ if (YII_ENV_DEV) {
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1', '*'],
+    ];
+
+    $config['components']['assetManager'] = [
+        'converter' => [
+            'class' => 'yii\web\AssetConverter',
+            'commands' => [
+                'scss' => ['css', 'sass {from} {to} --no-color']
+            ],
+        ],
     ];
 }
 
