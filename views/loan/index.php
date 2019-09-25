@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -20,13 +21,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'tableOptions' => [
+            'class' => 'table table-striped',
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'user_id',
-            'amount',
-            'interest',
+            [
+                'label' => 'User',
+                'value' => function ($model) {
+                    $user = User::findOne($model->user_id);
+                    if ($user) {
+                        return $user->first_name . ' ' . $user->last_name;
+                    } else {
+                        return 'User deleted.';
+                    }
+                }
+            ],
+            [
+                'label' => 'Amount',
+                'value' => function ($model) {
+                    return sprintf('%s €', $model->amount);
+                }
+            ],
+            [
+                'label' => 'Interest',
+                'value' => function ($model) {
+                    return sprintf('%s €', $model->interest);
+                }
+            ],
             'duration',
             'start_date',
             'end_date',

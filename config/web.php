@@ -75,7 +75,7 @@ if (YII_ENV_DEV) {
         'converter' => [
             'class' => 'yii\web\AssetConverter',
             'commands' => [
-                'scss' => ['css', 'sass {from} {to} --no-color']
+                'scss' => ['css', 'sass {from} {to} --style compressed']
             ],
         ],
     ];

@@ -58,9 +58,15 @@ class LoanController extends Controller
         $model = $this->findModel($id);
         $user = User::findOne($model->user_id);
 
+        if ($user) {
+            $user_display_name = $user->first_name . ' ' . $user->last_name;
+        } else {
+            $user_display_name = 'User deleted.';
+        }
+
         return $this->render('view', [
             'model' => $model,
-            'user' => $user,
+            'user_display_name' => $user_display_name,
         ]);
     }
 

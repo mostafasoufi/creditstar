@@ -32,10 +32,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'label' => 'User',
-                'value' => $user->first_name . ' ' . $user->last_name
+                'value' => $user_display_name,
             ],
-            'amount',
-            'interest',
+            [
+                'label' => 'Amount',
+                'value' => function ($model) {
+                    return sprintf('%s €', $model->amount);
+                }
+            ],
+            [
+                'label' => 'Interest',
+                'value' => function ($model) {
+                    return sprintf('%s €', $model->interest);
+                }
+            ],
             'duration',
             'start_date',
             'end_date',

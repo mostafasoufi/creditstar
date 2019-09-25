@@ -1,5 +1,7 @@
 <?php
 
+use app\models\User;
+use RKD\PersonalIdCode\PersonalIdCode;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -20,6 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'tableOptions' => [
+            'class' => 'table table-striped',
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -27,6 +32,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'first_name:ntext',
             'last_name:ntext',
             'email:ntext',
+            [
+                'label' => 'Age',
+                'value' => function ($model) {
+                    $id = new PersonalIdCode($model->personal_code);
+                    return $id->getAge();
+                }
+            ],
+            [
+                'label' => 'Gender',
+                'value' => function ($model) {
+                    $id = new PersonalIdCode($model->personal_code);
+                    return ucfirst($id->getGender());
+                }
+            ],
             'personal_code',
             'phone',
             //'active:boolean',
