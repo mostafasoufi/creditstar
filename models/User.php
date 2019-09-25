@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "user".
@@ -64,5 +65,26 @@ class User extends \yii\db\ActiveRecord
             'dead' => 'Dead',
             'lang' => 'Lang',
         ];
+    }
+
+    /**
+     * @param $data
+     * @return int
+     * @throws Exception
+     */
+    public static function insertUser($data)
+    {
+        Yii::$app->db->createCommand()->insert('user', array(
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'personal_code' => $data['personal_code'],
+            'phone' => $data['phone'],
+            'active' => $data['active'],
+            'dead' => $data['dead'],
+            'lang' => $data['lang'],
+        ))->execute();
+
+        return Yii::$app->db->lastInsertID;
     }
 }

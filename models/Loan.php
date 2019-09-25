@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "loan".
@@ -59,5 +60,25 @@ class Loan extends \yii\db\ActiveRecord
             'campaign' => 'Campaign',
             'status' => 'Status',
         ];
+    }
+
+    /**
+     * @param $data
+     * @param $user_id
+     * @return int
+     * @throws Exception
+     */
+    public static function insertLoan($data, $user_id)
+    {
+        return Yii::$app->db->createCommand()->insert('loan', array(
+            'user_id' => $user_id,
+            'amount' => $data['amount'],
+            'interest' => $data['interest'],
+            'duration' => $data['duration'],
+            'start_date' => date('Y-m-d', $data['start_date']),
+            'end_date' => date('Y-m-d', $data['end_date']),
+            'campaign' => $data['campaign'],
+            'status' => $data['status'],
+        ))->execute();
     }
 }

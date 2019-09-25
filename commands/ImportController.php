@@ -7,8 +7,8 @@
 
 namespace app\commands;
 
-use app\models\Importer;
 use app\models\User;
+use app\models\Loan;
 use yii\base\Action;
 use yii\console\Controller;
 use yii\helpers\Console;
@@ -129,8 +129,6 @@ class ImportController extends Controller
      */
     public function actionIndex()
     {
-        $importer = new Importer();
-
         foreach ($this->json['user'] as $user) {
             // Check user exist.
             if (User::find()->where(['email' => $user->email])->count()) {
@@ -139,14 +137,13 @@ class ImportController extends Controller
             }
 
             try {
-
-                $user_id = $importer->user((array)$user);
+                $user_id = User::insertUser((array)$user);
                 $this->stdout(sprintf("User %s imported successfully.\n", $user->id), Console::FG_GREEN);
 
                 // Insert user loans
                 foreach ($this->json['loan'] as $loan) {
                     if ($loan->user_id == $user->id) {
-                        $importer->loan((array)$loan, $user_id);
+                        Loan::insertLoan((array)$loan, $user_id);
                         $this->stdout(sprintf(" - Loan %s imported.\n", $loan->id));
                     }
                 }
