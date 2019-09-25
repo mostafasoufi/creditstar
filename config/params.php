@@ -1,7 +1,5 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'tester@example.com',
-    'senderName' => 'tester',
+    'min_age_loan' => 25,
 ];
