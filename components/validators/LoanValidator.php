@@ -14,6 +14,11 @@ class LoanValidator extends Validator
         // Get user.
         $user = User::findOne($model->user_id);
 
+        if (!$user) {
+            $this->addError($model, $attribute, 'User not found.');
+            return;
+        }
+
         // Get personal code.
         $id = new PersonalIdCode($user->personal_code);
 
