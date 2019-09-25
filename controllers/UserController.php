@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Loan;
 use RKD\PersonalIdCode\PersonalIdCode;
 use Throwable;
 use Yii;
@@ -11,6 +12,7 @@ use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\base\DynamicModel;
 
 /**
  * UserController implements the CRUD actions for User model.

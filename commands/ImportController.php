@@ -10,6 +10,7 @@ namespace app\commands;
 use app\models\User;
 use app\models\Loan;
 use yii\base\Action;
+use yii\base\DynamicModel;
 use yii\console\Controller;
 use yii\helpers\Console;
 use JsonSchema;
@@ -129,6 +130,8 @@ class ImportController extends Controller
      */
     public function actionIndex()
     {
+        $loanModel = new Loan();
+
         foreach ($this->json['user'] as $user) {
             // Check user exist.
             if (User::find()->where(['email' => $user->email])->count()) {
@@ -143,8 +146,23 @@ class ImportController extends Controller
                 // Insert user loans
                 foreach ($this->json['loan'] as $loan) {
                     if ($loan->user_id == $user->id) {
-                        Loan::insertLoan((array)$loan, $user_id);
-                        $this->stdout(sprintf(" - Loan %s imported.\n", $loan->id));
+
+                        // Custom validation.
+                        $loan = (array)$loan;
+                        $loan['user_id'] = $user_id;
+                        $model = DynamicModel::validateData($loan, $loanModel->rules());
+
+                        if ($model->validate()) {
+                            Loan::insertLoan($loan, $user_id);
+                            $this->stdout(sprintf(" - Loan %s imported.\n", $loan['id']));
+                        } else {
+                            foreach ($model->errors as $error) {
+                                foreach ($error as $e) {
+                                    $this->stdout(sprintf(" - Validation error, %s\n", $e), Console::FG_RED);
+                                }
+                            }
+                        }
+
                     }
                 }
 
