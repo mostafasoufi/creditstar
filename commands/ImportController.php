@@ -135,7 +135,7 @@ class ImportController extends Controller
         foreach ($this->json['user'] as $user) {
             // Check user exist.
             if (User::find()->where(['email' => $user->email])->count()) {
-                $this->stdout(sprintf("Email %s already exist.\n", $user->email), Console::FG_RED);
+                $this->stdout(sprintf("Error! email %s already exist.\n", $user->email), Console::FG_RED);
                 continue;
             }
 
