@@ -52,4 +52,3 @@ Then run the below commands for install the `node` and `npm`.
 To run the unit tests, execute the following command:
 
     docker-compose run --rm php codecept run
->>>>>>> development
