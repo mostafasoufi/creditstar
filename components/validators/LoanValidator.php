@@ -23,7 +23,7 @@ class LoanValidator extends Validator
         $id = new PersonalIdCode($user->personal_code);
 
         if ($id->getAge() < Yii::$app->params['min_age_loan']) {
-            $this->addError($model, $attribute, 'User is not allowed to get a loan, the minimum age is {minimum_age}.', ['minimum_age' => 12]);
+            $this->addError($model, $attribute, 'User is not allowed to get a loan, the minimum age is {minimum_age}.', ['minimum_age' => Yii::$app->params['min_age_loan']]);
         }
     }
 }
