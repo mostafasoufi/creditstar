@@ -135,7 +135,7 @@ class ImportController extends Controller
         foreach ($this->json['user'] as $user) {
             // Check user exist.
             if (User::find()->where(['email' => $user->email])->count()) {
-                $this->stdout(sprintf("Error! email %s already exist.\n", $user->email), Console::FG_RED);
+                $this->stdout(sprintf("Email %s already exist.\n", $user->email), Console::FG_RED);
                 continue;
             }
 
@@ -154,11 +154,11 @@ class ImportController extends Controller
 
                         if ($model->validate()) {
                             Loan::insertLoan($loan, $user_id);
-                            $this->stdout(sprintf(" - Loan %s imported.\n", $loan['id']));
+                            $this->stdout(sprintf(" Loan %s imported.\n", $loan['id']));
                         } else {
                             foreach ($model->errors as $error) {
                                 foreach ($error as $e) {
-                                    $this->stdout(sprintf(" - Validation error, %s\n", $e), Console::FG_RED);
+                                    $this->stdout(sprintf(" Loan %s not imported, %s\n", $loan['id'], $e), Console::FG_RED);
                                 }
                             }
                         }
@@ -167,7 +167,7 @@ class ImportController extends Controller
                 }
 
             } catch (\Exception $e) {
-                $this->stdout(sprintf(" - Error: %s\n", $e->getMessage()), Console::FG_RED);
+                $this->stdout(sprintf(" Error: %s\n", $e->getMessage()), Console::FG_RED);
             }
         }
     }
